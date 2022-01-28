@@ -44,5 +44,5 @@ begin
 rescue TTY::Reader::InputInterrupt => e
   # No Op
   puts # a new line is needed
-  puts "Staying at current (abort detected): #{CURRENT_RVM}"
+  puts "Staying at Current Branch (Abort Detected): #{current_branch}"
 end

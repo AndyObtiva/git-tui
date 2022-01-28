@@ -1,5 +1,9 @@
-# Git-TUI (Git Text-based User Interface)
+# Git-TUI (Git Text-based User Interface) 0.0.2
 [![Gem Version](https://badge.fury.io/rb/git-tui.svg)](https://badge.fury.io/rb/git-tui)
+
+This is an unobtrusive Git TUI (Text-based User Interface) that provides quick time-saving interactions only for Git commands that need it (e.g. `git checkout branchname`) while letting developers to continue to use Git from the command line for the rest of the option-less commands like `git pull`, especially given the ability to setup git aliases (e.g. `g pr` for `git pull --rebase`)
+
+Git-TUI intentionally avoids what some other TUIs do in taking up the whole screen to avoid interrupting the developer completely from the terminal yet only augment their workflow with improved productivity for Git option-heavy commands that benefit from auto-completion (e.g. `git checkout branchname`).
 
 ![GIT TUI DEMO](git-tui-demo.gif)
 
@@ -25,7 +29,7 @@ These are the commands you need to run in order to select a Ruby and gemset, ins
 
 ```
 rvm use @default # or a different ruby version/gemset like `rvm use ruby-3.1.0@git-tui --create`
-gem install git-tui
+gem install git-tui -v0.0.2
 git-tui-setup
 ```
 
