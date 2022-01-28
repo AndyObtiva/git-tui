@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+
+# Copyright (c) 2022 Andy Maleh
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+version = File.read(File.expand_path('../../VERSION', __FILE__))
+puts "== git-tui-setup version #{version.strip} =="
+
+ruby = `which ruby`
+ruby = `which jruby` if ruby.to_s.strip.empty?
+ruby = ruby.strip
+rvm = `rvm current`.strip
+command = "rvm #{rvm} do #{ruby} #{File.expand_path('../../lib/git-tui.rb', __FILE__)}"
+
+git_tui_script = <<~SHELL_SCRIPT
+  function git-tui()
+  {
+    # Load RVM into a shell session *as a function*
+    if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
+      # First try to load from a user install
+      source "$HOME/.rvm/scripts/rvm"
+    elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
+      # Then try to load from a root install
+      source "/usr/local/rvm/scripts/rvm"
+    else
+      printf "ERROR: An RVM installation was not found.\\n"
+    fi
+    
+    current_rvm="$(rvm current)"
+    current_ruby="$(echo $current_rvm | sed -E 's/@.*$//')"
+    current_gemset="default"
+    if [[ $current_rvm == *"@"* ]] ; then
+      current_gemset="$(echo $current_rvm | sed -E 's/^[^@]+@//')"
+    fi
+    #{command} $current_ruby $current_gemset
+    if [ -f "$HOME/.git_command" ] ; then
+      source $HOME/.git_command > /dev/null
+      rm $HOME/.git_command
+    fi
+  }
+  alias gitui=git-tui
+  alias git-ui=git-tui
+SHELL_SCRIPT
+
+require 'fileutils'
+home_dir = `echo ~`.strip
+FileUtils.mkdir_p("#{home_dir}/bin")
+git_tui_script_file = "#{home_dir}/.git_tui_source"
+git_tui_script_file_bash = "$HOME/.git_tui_source"
+File.write(git_tui_script_file, git_tui_script)
+
+[
+  ['.bash_profile', '.bashrc'],
+  ['.zprofile', '.zshrc']
+].each do |profile_and_fallback|
+  shell_profile_file_name = profile_and_fallback.first
+  shell_profile_file_name = profile_and_fallback.last if !File.exist?("#{home_dir}/#{shell_profile_file_name}")
+  shell_profile_file = "#{home_dir}/#{shell_profile_file_name}"
+  FileUtils.touch(shell_profile_file)
+  bash_profile = File.read(shell_profile_file)
+  git_tui_source_statement = "source \"#{git_tui_script_file_bash}\""
+  unless bash_profile.split("\n").detect {|line| line.include?(git_tui_source_statement) }
+    File.write(shell_profile_file, "#{bash_profile}\n#{git_tui_source_statement}")
+  end
+  puts "~/#{shell_profile_file_name} has been modified to source the `git-tui` function from ~/.git_tui_source"
+end
+
+puts <<~OUTPUT
+  
+  Before using `git-tui`, start a new shell session (open a new terminal tab) or run:
+  
+  source ~/.git_tui_source
+  
+  Afterwards, you may run `git-tui` via one of these commands (aliases):
+  
+  git-tui
+  git-ui
+  gitui
+OUTPUT
