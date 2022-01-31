@@ -18,7 +18,7 @@ Juwelier::Tasks.new do |gem|
   gem.license = "Apache-2.0"
   gem.summary = %Q{Git-TUI (Git Text-based User Interface)}
   gem.description = %Q{Git-TUI (Git Text-based User Interface)}
-  gem.post_install_message = "\nTo finish setting up the git-tui Ruby gem in your shell environment, run: git-tui-setup\n\n"
+  gem.post_install_message = "\nTo finish setting up the git-tui Ruby gem in your shell environment, run `git-tui-setup` in order to setup git-tui command and global git aliases/configuration.\n\n"
   gem.email = "andy.am@gmail.com"
   gem.authors = ["andy_maleh"]
   gem.executables = ['git-tui-setup']

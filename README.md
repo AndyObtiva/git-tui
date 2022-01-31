@@ -1,9 +1,9 @@
-# Git-TUI (Git Text-based User Interface) 0.0.2
+# Git-TUI (Git Text-based User Interface) 0.0.3
 [![Gem Version](https://badge.fury.io/rb/git-tui.svg)](https://badge.fury.io/rb/git-tui)
 
-This is an unobtrusive Git TUI (Text-based User Interface) that provides quick time-saving interactions only for Git commands that need it (e.g. `git checkout branchname`) while letting developers to continue to use Git from the command line for the rest of the option-less commands like `git pull`, especially given the ability to setup git aliases (e.g. `g pr` for `git pull --rebase`)
+This is an unobtrusive Git TUI (Text-based User Interface) that provides quick time-saving interactions only for Git commands that need them (e.g. `git checkout branchname`) while [setting up global git aliases/configuration](#setup-instructions) to let developers to continue to use Git from the command line for the rest of the option-less commands (e.g. `g pr` for `git pull --rebase` and `g pf` for `push --force-with-lease`).
 
-Git-TUI intentionally avoids what some other TUIs do in taking up the whole screen to avoid interrupting the developer completely from the terminal yet only augment their workflow with improved productivity for Git option-heavy commands that benefit from auto-completion (e.g. `git checkout branchname`).
+Git-TUI intentionally avoids what some other TUIs do in taking up the whole screen to avoid interrupting the developer completely from the terminal yet only augment their workflow with improved productivity for Git option-heavy commands that benefit from auto-completion (e.g. browsing available branches with autocomplete).
 
 ![GIT TUI DEMO](git-tui-demo.gif)
 
@@ -29,8 +29,51 @@ These are the commands you need to run in order to select a Ruby and gemset, ins
 
 ```
 rvm use @default # or a different ruby version/gemset like `rvm use ruby-3.1.0@git-tui --create`
-gem install git-tui -v0.0.2
+gem install git-tui -v0.0.3
 git-tui-setup
+```
+
+This will add the `git-tui` command (shell function with `git-ui` and `gitui` aliases) and `g` alias for `git`.
+
+Additionally, the following global git configuration will be added to `~/.gitconfig`:
+
+```ini
+[alias]
+  aa = add -A
+  am = commit -am
+  ap = add -p
+  df = diff
+  dh = diff HEAD
+  br = branch
+  co = checkout
+  lp = log -p
+  sa = stash apply
+  sd = stash drop
+  sh = stash -u
+  sl = stash list
+  sp = stash pop
+  ss = stash save -u
+  st = status
+  cam = commit -am
+  cl = clone
+  ci = commit
+  cia = commit --amend
+  cm = commit -m
+  m = commit -m
+  mg = merge
+  pk = cherry-pick
+  ps = push
+  pf = push --force-with-lease
+  pl = pull
+  pr = pull --rebase
+  rb = rebase
+  rc = rebase --continue
+  rs = rebase --skip
+  ra = rebase --abort
+  ri = rebase --interactive
+  rh = reset HEAD
+[branch]
+  autoSetupRebase = always
 ```
 
 ## Usage

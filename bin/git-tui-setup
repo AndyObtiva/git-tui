@@ -58,6 +58,7 @@ git_tui_script = <<~SHELL_SCRIPT
   }
   alias gitui=git-tui
   alias git-ui=git-tui
+  alias g=git
 SHELL_SCRIPT
 
 require 'fileutils'
@@ -74,7 +75,9 @@ File.write(git_tui_script_file, git_tui_script)
   shell_profile_file_name = profile_and_fallback.first
   shell_profile_file_name = profile_and_fallback.last if !File.exist?("#{home_dir}/#{shell_profile_file_name}")
   shell_profile_file = "#{home_dir}/#{shell_profile_file_name}"
+  
   FileUtils.touch(shell_profile_file)
+  
   bash_profile = File.read(shell_profile_file)
   git_tui_source_statement = "source \"#{git_tui_script_file_bash}\""
   unless bash_profile.split("\n").detect {|line| line.include?(git_tui_source_statement) }
@@ -82,6 +85,46 @@ File.write(git_tui_script_file, git_tui_script)
   end
   puts "~/#{shell_profile_file_name} has been modified to source the `git-tui` function from ~/.git_tui_source"
 end
+
+{
+  'aa'  => 'add -A',
+  'am'  => 'commit -am',
+  'ap'  => 'add -p',
+  'df'  => 'diff',
+  'dh'  => 'diff HEAD',
+  'br'  => 'branch',
+  'co'  => 'checkout',
+  'lp'  => 'log -p',
+  'sa'  => 'stash apply',
+  'sd'  => 'stash drop',
+  'sh'  => 'stash -u',
+  'sl'  => 'stash list',
+  'sp'  => 'stash pop',
+  'ss'  => 'stash save -u',
+  'st'  => 'status',
+  'cam' => 'commit -am',
+  'cl'  => 'clone',
+  'ci'  => 'commit',
+  'cia' => 'commit --amend',
+  'cm'  => 'commit -m',
+  'm'   => 'commit -m',
+  'mg'  => 'merge',
+  'pk'  => 'cherry-pick',
+  'ps'  => 'push',
+  'pf'  => 'push --force-with-lease',
+  'pl'  => 'pull',
+  'pr'  => 'pull --rebase',
+  'rb'  => 'rebase',
+  'rc'  => 'rebase --continue',
+  'rs'  => 'rebase --skip',
+  'ra'  => 'rebase --abort',
+  'ri'  => 'rebase --interactive',
+  'rh'  => 'reset HEAD',
+}.each do |git_alias, git_command|
+  system "git config --global alias.#{git_alias} '#{git_command}'"
+end
+
+system "git config --global branch.autoSetupRebase 'always'"
 
 puts <<~OUTPUT
   
