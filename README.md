@@ -1,5 +1,7 @@
-# Git-TUI (Git Text-based User Interface) 0.0.3
+# Git-TUI (Git Text-based User Interface) Alpha 0.0.3
 [![Gem Version](https://badge.fury.io/rb/git-tui.svg)](https://badge.fury.io/rb/git-tui)
+
+(note that this project is an incomplete work in progress alpha)
 
 This is an unobtrusive Git TUI (Text-based User Interface) that provides quick time-saving interactions only for Git commands that need them (e.g. `git checkout branchname`) while [setting up global git aliases/configuration](#setup-instructions) to let developers to continue to use Git from the command line for the rest of the option-less commands (e.g. `g pr` for `git pull --rebase` and `g pf` for `push --force-with-lease`).
 
