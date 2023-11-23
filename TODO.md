@@ -1,5 +1,6 @@
 # TODO
 
+- Remember order of branches that have been checked out and provide a way to get to the last few branches that have been visited
 - Support showing history (git log and git log -p) of specified branch
 - Support rebasing a branch off of the latest master (it auto pulls latest master before rebasing)
 - Support merging a branch into master after rebasing the latest master (automation of multiple git commands)
